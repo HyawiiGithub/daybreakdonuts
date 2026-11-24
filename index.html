@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff8ef">
+  <meta name="description" content="A little love, a lot of glaze. Meet the handmade donuts from Daybreak Donuts.">
+  <title>Daybreak Donuts | made for the little moments</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fff8ef;
+      --ink: #321b19;
+      --muted: #876f68;
+      --pink: #f27891;
+      --pink-dark: #d94f70;
+      --yellow: #f8c857;
+      --mint: #a7d7bd;
+      --line: rgba(67, 37, 32, .12);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; font: inherit; }
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .14;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+    }
+    .site-header {
+      position: relative;
+      z-index: 5;
+      width: min(1320px, calc(100% - 72px));
+      margin: 0 auto;
+      height: 94px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -.055em;
+    }
+    .brand-mark {
+      width: 35px;
+      height: 35px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--pink-dark);
+      transform: rotate(-12deg);
+    }
+    .nav-links { display: flex; align-items: center; gap: 38px; }
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      transition: color .2s ease;
+    }
+    .nav-links a:hover { color: var(--pink-dark); }
+    .nav-order, .button {
+      border: 0;
+      border-radius: 99px;
+      background: var(--ink);
+      color: white;
+      padding: 14px 21px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    }
+    .nav-order:hover, .button:hover {
+      background: var(--pink-dark);
+      box-shadow: 0 9px 22px rgba(217, 79, 112, .22);
+      transform: translateY(-3px);
+    }
+    .menu-toggle { display: none; }
+
+    .hero {
+      width: min(1320px, calc(100% - 72px));
+      min-height: 660px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      align-items: center;
+      position: relative;
+      padding: 44px 0 78px;
+    }
+    .hero-copy { position: relative; z-index: 2; padding: 15px 0 0 4.5%; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--pink-dark);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+    h1 {
+      max-width: 590px;
+      margin: 25px 0 22px;
+      font-family: var(--serif);
+      font-size: clamp(62px, 7.5vw, 108px);
+      font-weight: 500;
+      line-height: .91;
+      letter-spacing: -.075em;
+    }
+    h1 em { color: var(--pink-dark); font-weight: 500; }
+    .hero-copy > p {
+      max-width: 385px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 22px; margin-top: 31px; }
+    .button { display: inline-flex; align-items: center; gap: 14px; padding: 17px 23px; }
+    .button .arrow { font-size: 17px; line-height: 10px; transition: transform .2s ease; }
+    .button:hover .arrow { transform: translateX(4px); }
+    .proof { display: flex; align-items: center; gap: 11px; color: var(--muted); font-size: 11px; }
+    .proof strong { color: var(--ink); }
+    .stars { color: var(--pink-dark); font-size: 14px; letter-spacing: .08em; }
+    .hero-art {
+      --tilt-x: 0deg;
+      --tilt-y: 0deg;
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 550px;
+      perspective: 1000px;
+    }
+    .hero-art::before {
+      content: "";
+      position: absolute;
+      width: min(37vw, 470px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #f9e9d8;
+      animation: breathe 5s ease-in-out infinite;
+    }
+    .donut-wrap {
+      width: min(100%, 630px);
+      position: relative;
+      z-index: 1;
+      transform: rotate(var(--tilt-y)) rotateX(var(--tilt-x));
+      transition: transform .25s ease-out;
+      animation: donut-float 5.5s ease-in-out infinite;
+      filter: drop-shadow(0 28px 22px rgba(109, 61, 43, .14));
+    }
+    .donut-svg { display: block; width: 100%; overflow: visible; }
+    .donut-shadow { fill: #b97045; opacity: .24; }
+    .dough {
+      fill: url(#dough);
+      stroke: #bc7046;
+      stroke-width: 8;
+      filter: url(#doughTexture);
+    }
+    .dough-shine { fill: none; stroke: #ffe2a5; stroke-width: 13; opacity: .54; }
+    .donut-hole { fill: #6d382d; }
+    .hole-shadow { fill: #351c1a; opacity: .36; }
+    .glaze {
+      fill: var(--glaze, #f27891);
+      stroke: var(--glaze-edge, #d95473);
+      stroke-width: 4;
+      fill-rule: evenodd;
+      transition: fill .45s ease, stroke .45s ease;
+      filter: url(#glazeDepth);
+    }
+    .glaze-shine {
+      fill: none;
+      stroke: rgba(255,255,255,.55);
+      stroke-width: 9;
+      stroke-linecap: round;
+      opacity: .85;
+    }
+    .sprinkle {
+      stroke: #fff7db;
+      stroke-width: 9;
+      stroke-linecap: round;
+      animation: sprinkle-pop 2.8s ease-in-out infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .sprinkle:nth-of-type(2n) { animation-delay: -.8s; }
+    .sprinkle:nth-of-type(3n) { animation-delay: -1.7s; }
+    .sprinkle.pink { stroke: #da4567; }
+    .sprinkle.yellow { stroke: #ffd05c; }
+    .sprinkle.blue { stroke: #73b9bb; }
+    .sprinkle.brown { stroke: #89503c; }
+    .sprinkle-white { fill: white; opacity: .55; }
+    .orbit {
+      position: absolute;
+      z-index: 2;
+      border: 1px solid rgba(125, 79, 63, .22);
+      border-radius: 50%;
+      width: 82%;
+      height: 55%;
+      transform: rotate(-28deg);
+      animation: orbit-turn 22s linear infinite;
+      pointer-events: none;
+    }
+    .orbit::before, .orbit::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+    .orbit::before { top: 5%; left: 18%; }
+    .orbit::after { right: 7%; bottom: 17%; width: 7px; height: 7px; background: var(--mint); }
+    .orbit-label {
+      position: absolute;
+      z-index: 3;
+      top: 13%;
+      right: 3%;
+      width: 88px;
+      height: 88px;
+      background: var(--yellow);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      line-height: 1.4;
+      text-transform: uppercase;
+      transform: rotate(12deg);
+      animation: badge-wiggle 4s ease-in-out infinite;
+    }
+    .orbit-label span { font-family: var(--serif); font-size: 22px; font-style: italic; }
+    .art-note {
+      position: absolute;
+      z-index: 2;
+      left: 1%;
+      bottom: 13%;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 14px;
+      font-style: italic;
+      transform: rotate(-7deg);
+    }
+    .art-note::before { content: "✳"; color: var(--pink-dark); font-size: 25px; font-style: normal; }
+    .flavor-picker {
+      position: absolute;
+      z-index: 3;
+      right: 1%;
+      bottom: 3%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: rgba(255, 248, 239, .8);
+      backdrop-filter: blur(8px);
+    }
+    .flavor-picker span { margin-right: 3px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .flavor {
+      width: 19px;
+      height: 19px;
+      border: 2px solid var(--paper);
+      outline: 1px solid transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform .2s ease, outline-color .2s ease;
+    }
+    .flavor:hover { transform: scale(1.2); }
+    .flavor[aria-pressed="true"] { outline-color: var(--ink); }
+    .flavor[data-flavor="berry"] { background: #f27891; }
+    .flavor[data-flavor="chocolate"] { background: #744337; }
+    .flavor[data-flavor="pistachio"] { background: #8ebc8c; }
+    .scroll-cue {
+      position: absolute;
+      left: 5%;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .scroll-cue i { width: 1px; height: 35px; background: var(--pink-dark); animation: scroll-pulse 1.6s ease-in-out infinite; }
+
+    .ticker {
+      overflow: hidden;
+      background: var(--pink);
+      color: white;
+      transform: rotate(-1.5deg) scale(1.02);
+      padding: 17px 0;
+      white-space: nowrap;
+    }
+    .ticker-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+    .ticker span { padding: 0 22px; font-family: var(--serif); font-size: 17px; font-style: italic; }
+    .ticker b { font-size: 12px; }
+
+    .section { width: min(1200px, calc(100% - 72px)); margin: 0 auto; }
+    .menu-section { padding: 137px 0 120px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 43px; }
+    .section-head .eyebrow { margin-bottom: 15px; }
+    h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(42px, 5vw, 68px);
+      font-weight: 500;
+      letter-spacing: -.065em;
+      line-height: .98;
+    }
+    .section-head > p { max-width: 300px; margin: 0 4% 5px 20px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .menu-card {
+      position: relative;
+      min-height: 370px;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fffdf9;
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 35px rgba(81, 46, 37, .1); }
+    .menu-card:nth-child(2) { background: #f6f0e5; }
+    .menu-card:nth-child(3) { background: #eff5e9; }
+    .card-label { position: relative; z-index: 2; display: inline-block; font-size: 9px; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
+    .menu-card h3 { position: relative; z-index: 2; margin: 10px 0 6px; font-family: var(--serif); font-size: 27px; font-weight: 500; letter-spacing: -.04em; }
+    .menu-card p { position: relative; z-index: 2; max-width: 220px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+    .card-price { position: absolute; z-index: 2; bottom: 23px; left: 21px; font-size: 12px; font-weight: 900; }
+    .card-price small { color: var(--muted); font-size: 9px; font-weight: 500; }
+    .mini-donut {
+      position: absolute;
+      width: 200px;
+      right: -9px;
+      bottom: -34px;
+      filter: drop-shadow(0 13px 10px rgba(100, 54, 38, .16));
+      transition: transform .55s cubic-bezier(.2,.8,.2,1);
+    }
+    .menu-card:hover .mini-donut { transform: rotate(13deg) translate(-5px, -7px) scale(1.04); }
+    .card-number { position: absolute; top: 19px; right: 20px; color: rgba(50,27,25,.35); font-family: var(--serif); font-size: 13px; font-style: italic; }
+
+    .story {
+      position: relative;
+      overflow: hidden;
+      background: #4a2b27;
+      color: #fff8ef;
+      padding: 94px 0;
+    }
+    .story::before {
+      content: "";
+      position: absolute;
+      width: 570px;
+      height: 570px;
+      left: -180px;
+      top: -280px;
+      border: 1px solid rgba(255,248,239,.16);
+      border-radius: 50%;
+      box-shadow: 0 0 0 50px rgba(255,248,239,.025), 0 0 0 110px rgba(255,248,239,.02);
+    }
+    .story-inner { width: min(1200px, calc(100% - 72px)); margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; position: relative; }
+    .story-copy .eyebrow { color: var(--yellow); }
+    .story-copy h2 { max-width: 490px; margin: 22px 0; font-size: clamp(45px, 5vw, 70px); }
+    .story-copy > p { max-width: 390px; color: rgba(255,248,239,.7); font-size: 13px; line-height: 1.9; }
+    .story-copy .button { margin-top: 15px; background: var(--yellow); color: var(--ink); }
+    .story-copy .button:hover { background: white; }
+    .process { border-top: 1px solid rgba(255,248,239,.2); }
+    .process-step { display: grid; grid-template-columns: 46px 1fr; gap: 17px; padding: 23px 0; border-bottom: 1px solid rgba(255,248,239,.2); }
+    .process-step b { color: var(--yellow); font-family: var(--serif); font-size: 19px; font-style: italic; font-weight: 400; }
+    .process-step h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+    .process-step p { max-width: 310px; margin: 0; color: rgba(255,248,239,.62); font-size: 11px; line-height: 1.7; }
+
+    .quote-section { text-align: center; padding: 112px 24px 125px; }
+    .quote-section .stars { font-size: 18px; }
+    blockquote {
+      max-width: 780px;
+      margin: 25px auto;
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 50px);
+      letter-spacing: -.05em;
+      line-height: 1.16;
+    }
+    .quote-by { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .quote-by span { color: var(--pink-dark); }
+    .closing {
+      background: #f8c857;
+      padding: 69px 24px 73px;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .closing::before, .closing::after { content: "✳"; position: absolute; color: rgba(50,27,25,.12); font-size: 160px; }
+    .closing::before { left: 9%; top: -25px; animation: slow-spin 20s linear infinite; }
+    .closing::after { right: 8%; bottom: -64px; animation: slow-spin 27s linear infinite reverse; }
+    .closing .eyebrow { justify-content: center; color: var(--ink); }
+    .closing h2 { max-width: 650px; margin: 18px auto 23px; font-size: clamp(45px, 6vw, 78px); }
+    .closing .button { background: var(--ink); }
+    footer {
+      width: min(1320px, calc(100% - 72px));
+      min-height: 92px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a:hover { color: var(--pink-dark); }
+    .toast {
+      position: fixed;
+      z-index: 30;
+      left: 50%;
+      bottom: 24px;
+      padding: 15px 21px;
+      border-radius: 99px;
+      background: var(--ink);
+      color: white;
+      font-size: 12px;
+      opacity: 0;
+      transform: translate(-50%, 18px);
+      transition: opacity .25s ease, transform .25s ease;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .menu-card:nth-child(2).reveal { transition-delay: .12s; }
+    .menu-card:nth-child(3).reveal { transition-delay: .24s; }
+
+    @keyframes donut-float { 0%,100% { transform: translateY(0) rotate(var(--tilt-y)) rotateX(var(--tilt-x)); } 50% { transform: translateY(-14px) rotate(var(--tilt-y)) rotateX(var(--tilt-x)); } }
+    @keyframes breathe { 0%,100% { transform: scale(.96); } 50% { transform: scale(1.04); } }
+    @keyframes orbit-turn { to { transform: rotate(332deg); } }
+    @keyframes badge-wiggle { 0%,100% { rotate: 12deg; } 50% { rotate: 4deg; } }
+    @keyframes sprinkle-pop { 0%,100% { scale: 1; } 50% { scale: 1.22; } }
+    @keyframes scroll-pulse { 0%,100% { transform: scaleY(.65); transform-origin: top; opacity: .5; } 50% { transform: scaleY(1); transform-origin: top; opacity: 1; } }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    @keyframes slow-spin { to { rotate: 360deg; } }
+
+    @media (max-width: 900px) {
+      .site-header, .hero, footer { width: min(100% - 42px, 720px); }
+      .nav-links { gap: 19px; }
+      .nav-links a { font-size: 9px; }
+      .hero { grid-template-columns: 1fr 1fr; min-height: 570px; }
+      .hero-copy { padding-left: 0; }
+      .hero-art { min-height: 420px; }
+      .hero-art::before { width: 35vw; }
+      .orbit-label { right: -1%; top: 9%; width: 72px; height: 72px; font-size: 7px; }
+      .orbit-label span { font-size: 18px; }
+      .section, .story-inner { width: min(100% - 42px, 720px); }
+      .menu-card { min-height: 330px; }
+      .mini-donut { width: 170px; }
+      .story-inner { gap: 45px; }
+    }
+    @media (max-width: 640px) {
+      .site-header { height: 75px; }
+      .brand { font-size: 14px; }
+      .menu-toggle {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: transparent;
+        font-size: 19px;
+        cursor: pointer;
+      }
+      .nav-links {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 65px;
+        padding: 15px 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--paper);
+        box-shadow: 0 15px 25px rgba(50,27,25,.1);
+      }
+      .nav-links.open { display: grid; gap: 0; }
+      .nav-links a { padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 10px; }
+      .nav-links a:last-child { border-bottom: 0; }
+      .nav-order { margin-left: auto; margin-right: 10px; padding: 12px 14px; font-size: 9px; }
+      .hero { width: calc(100% - 36px); display: flex; flex-direction: column; align-items: stretch; padding: 54px 0 70px; }
+      .hero-copy { padding: 0 3px; }
+      .hero-copy > p { max-width: 340px; font-size: 13px; }
+      h1 { max-width: 440px; margin: 20px 0 17px; font-size: clamp(61px, 17vw, 90px); }
+      .hero-actions { gap: 17px; flex-wrap: wrap; margin-top: 25px; }
+      .button { padding: 15px 18px; font-size: 10px; }
+      .proof { font-size: 10px; }
+      .hero-art { min-height: 360px; margin-top: 7px; }
+      .hero-art::before { width: min(76vw, 350px); }
+      .donut-wrap { width: min(108%, 490px); }
+      .orbit { width: 93%; height: 50%; }
+      .orbit-label { top: 3%; right: 3%; }
+      .art-note { left: 1%; bottom: 4%; font-size: 12px; }
+      .flavor-picker { right: 0; bottom: 1%; padding: 7px 9px; gap: 6px; }
+      .flavor-picker span { font-size: 8px; }
+      .scroll-cue { left: 0; bottom: 10px; font-size: 8px; }
+      .scroll-cue i { height: 24px; }
+      .ticker { padding: 13px 0; }
+      .ticker span { font-size: 14px; }
+      .section { width: calc(100% - 36px); }
+      .menu-section { padding: 86px 0 82px; }
+      .section-head { display: block; margin-bottom: 26px; }
+      .section-head > p { margin: 16px 0 0; max-width: 340px; }
+      .menu-grid { grid-template-columns: 1fr; gap: 12px; }
+      .menu-card { min-height: 310px; }
+      .mini-donut { width: 185px; }
+      .story { padding: 72px 0; }
+      .story-inner { width: calc(100% - 36px); grid-template-columns: 1fr; gap: 36px; }
+      .story-copy h2 { font-size: 52px; }
+      .process-step { padding: 19px 0; }
+      .quote-section { padding: 84px 22px 90px; }
+      .closing { padding: 59px 22px 62px; }
+      .closing::before { left: -36px; font-size: 110px; }
+      .closing::after { right: -35px; font-size: 110px; }
+      footer { width: calc(100% - 36px); min-height: 105px; align-items: flex-start; justify-content: center; flex-direction: column; gap: 12px; }
+      .footer-links { gap: 17px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Daybreak Donuts home"><span class="brand-mark">d</span><span>daybreak donuts</span></a>
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#menu">The menu</a>
+      <a href="#our-way">Our little way</a>
+      <a href="#love-notes">Love notes</a>
+    </nav>
+    <button class="nav-order" data-order>Get the good stuff <span aria-hidden="true">↗</span></button>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow">The happy place of donuts</div>
+        <h1 id="hero-title">A little<br>love. A lot of<br><em>glaze.</em></h1>
+        <p>Handmade, never hurried, and always dressed for the occasion. Find your new favorite little joy, baked fresh every morning.</p>
+        <div class="hero-actions">
+          <a class="button" href="#menu">Meet the donuts <span class="arrow" aria-hidden="true">→</span></a>
+          <div class="proof"><span class="stars" aria-label="5 out of 5 stars">★★★★★</span><span><strong>4.9/5</strong> from happy humans</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="An animated strawberry-glazed donut with colorful sprinkles">
+        <div class="orbit" aria-hidden="true"></div>
+        <div class="orbit-label" aria-hidden="true"><div>made fresh<br><span>daily</span></div></div>
+        <div class="art-note" aria-hidden="true">the original daydream</div>
+        <div class="donut-wrap" id="heroDonut">
+          <svg class="donut-svg" viewBox="0 0 800 640" role="img" aria-labelledby="donutTitle donutDesc">
+            <title id="donutTitle">Berry cloud donut</title>
+            <desc id="donutDesc">A fluffy golden donut topped with glossy pink icing and hand scattered sprinkles.</desc>
+            <defs>
+              <radialGradient id="dough" cx="38%" cy="28%" r="74%">
+                <stop offset="0" stop-color="#ffe4a3"/>
+                <stop offset=".48" stop-color="#eaaa63"/>
+                <stop offset=".83" stop-color="#c97843"/>
+                <stop offset="1" stop-color="#a95836"/>
+              </radialGradient>
+              <linearGradient id="icing" x1="0" y1="0" x2=".8" y2="1">
+                <stop offset="0" stop-color="#ffb5c3"/>
+                <stop offset=".4" stop-color="#f27891"/>
+                <stop offset="1" stop-color="#e45f7e"/>
+              </linearGradient>
+              <filter id="doughTexture" x="-15%" y="-15%" width="130%" height="130%">
+                <feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="12" result="noise"/>
+                <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+                <feComponentTransfer><feFuncA type="table" tableValues="0 .1"/></feComponentTransfer>
+                <feBlend in="SourceGraphic" mode="soft-light"/>
+              </filter>
+              <filter id="glazeDepth" x="-10%" y="-10%" width="120%" height="125%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+                <feOffset dy="5" result="offset"/>
+                <feComponentTransfer><feFuncA type="linear" slope=".24"/></feComponentTransfer>
+                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <radialGradient id="hole" cx="50%" cy="0%" r="90%">
+                <stop stop-color="#f8c77d"/>
+                <stop offset="1" stop-color="#9d5337"/>
+              </radialGradient>
+            </defs>
+            <ellipse class="donut-shadow" cx="402" cy="524" rx="226" ry="38"/>
+            <path class="dough" fill-rule="evenodd" d="M400 106 C554 106 681 201 681 322 C681 443 554 538 400 538 C246 538 119 443 119 322 C119 201 246 106 400 106 Z M400 230 C350 230 310 269 310 320 C310 371 350 410 400 410 C450 410 490 371 490 320 C490 269 450 230 400 230 Z"/>
+            <path class="dough-shine" d="M195 235 C224 184 285 151 343 145 M554 172 C605 199 638 239 650 278"/>
+            <ellipse class="donut-hole" cx="400" cy="320" rx="87" ry="70" fill="url(#hole)"/>
+            <path class="hole-shadow" d="M316 329 C333 377 361 397 401 398 C442 397 471 375 485 329 C469 354 443 365 400 365 C358 365 334 352 316 329Z"/>
+            <path class="glaze" fill="url(#icing)" d="M400 119 C462 119 513 133 557 159 C568 167 578 175 587 183 C601 179 614 178 624 186 C636 196 633 210 623 222 C646 244 666 275 670 308 C675 344 660 371 648 391 C638 407 645 421 639 436 C634 449 618 453 604 445 C587 461 566 473 541 486 C517 499 508 506 496 502 C483 498 484 483 482 470 C480 452 471 443 458 451 C443 460 448 488 433 499 C418 511 400 503 397 488 C394 473 393 458 381 459 C367 459 371 487 356 495 C342 503 329 492 330 474 C332 453 324 445 312 450 C297 455 299 479 284 484 C268 490 257 477 262 460 C267 442 255 434 243 441 C229 449 226 468 210 469 C193 470 188 454 197 438 C205 423 198 410 185 414 C170 418 162 438 147 433 C131 429 130 412 144 395 C157 378 151 366 136 366 C120 366 109 380 96 370 C83 361 89 343 105 330 C121 316 122 306 108 298 C93 290 76 295 69 281 C62 266 76 254 94 248 C114 241 119 230 107 220 C93 208 75 207 72 191 C68 175 85 168 106 169 C127 170 135 162 125 147 C116 132 99 124 105 108 C110 91 130 91 148 103 C166 115 178 111 176 95 C174 78 163 62 174 50 C186 37 202 47 216 64 C229 81 242 80 246 64 C251 47 246 29 260 21 C275 13 287 28 294 47 C302 66 314 71 323 57 C333 43 335 25 351 21 C368 17 376 35 378 56 C380 76 392 84 402 70 C414 54 418 37 435 37 C452 38 457 56 454 77 C452 97 462 105 476 94 C490 83 499 66 516 70 C533 74 534 93 525 112 C516 131 523 141 539 136 C556 130 568 116 584 125 C600 134 591 153 578 168 Z M400 225 C447 225 483 261 483 307 C483 354 447 390 400 390 C353 390 317 354 317 307 C317 261 353 225 400 225 Z"/>
+            <path class="glaze-shine" d="M225 175 C275 139 337 131 385 136 M534 158 C571 170 599 193 617 220"/>
+            <g aria-hidden="true">
+              <path class="sprinkle pink" d="M250 213l15 11"/><path class="sprinkle yellow" d="M330 174l16 -5"/>
+              <path class="sprinkle blue" d="M414 177l-3 17"/><path class="sprinkle brown" d="M498 194l-13 12"/>
+              <path class="sprinkle yellow" d="M571 241l-16 7"/><path class="sprinkle blue" d="M612 297l-14 3"/>
+              <path class="sprinkle pink" d="M575 357l-13 -10"/><path class="sprinkle yellow" d="M535 414l-15 9"/>
+              <path class="sprinkle blue" d="M472 438l-2 -15"/><path class="sprinkle pink" d="M365 435l10 -12"/>
+              <path class="sprinkle brown" d="M306 399l12 -8"/><path class="sprinkle yellow" d="M236 388l15 -4"/>
+              <path class="sprinkle blue" d="M191 332l15 5"/><path class="sprinkle pink" d="M191 271l12 9"/>
+              <circle class="sprinkle-white" cx="295" cy="255" r="5"/><circle class="sprinkle-white" cx="542" cy="300" r="4"/>
+              <circle class="sprinkle-white" cx="276" cy="350" r="4"/><circle class="sprinkle-white" cx="458" cy="227" r="4"/>
+            </g>
+          </svg>
+        </div>
+        <div class="flavor-picker" aria-label="Choose a glaze">
+          <span>Pick a glaze</span>
+          <button class="flavor" data-flavor="berry" aria-label="Berry glaze" aria-pressed="true"></button>
+          <button class="flavor" data-flavor="chocolate" aria-label="Chocolate glaze" aria-pressed="false"></button>
+          <button class="flavor" data-flavor="pistachio" aria-label="Pistachio glaze" aria-pressed="false"></button>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#menu"><i aria-hidden="true"></i>Scroll for the sweet stuff</a>
+    </section>
+
+    <div class="ticker" aria-label="Made with love, glazed with joy, baked fresh every morning">
+      <div class="ticker-track" aria-hidden="true">
+        <span>made with love</span><b>✳</b><span>glazed with joy</span><b>✳</b><span>baked fresh every morning</span><b>✳</b><span>made with love</span><b>✳</b><span>glazed with joy</span><b>✳</b><span>baked fresh every morning</span><b>✳</b>
+        <span>made with love</span><b>✳</b><span>glazed with joy</span><b>✳</b><span>baked fresh every morning</span><b>✳</b><span>made with love</span><b>✳</b><span>glazed with joy</span><b>✳</b><span>baked fresh every morning</span><b>✳</b>
+      </div>
+    </div>
+
+    <section class="section menu-section" id="menu" aria-labelledby="menu-title">
+      <div class="section-head reveal">
+        <div><div class="eyebrow">A few of our favorites</div><h2 id="menu-title">The good<br>stuff.</h2></div>
+        <p>Small-batch, hand-glazed, and gone before you know it. Here are the ones folks come back for.</p>
+      </div>
+      <div class="menu-grid">
+        <article class="menu-card reveal">
+          <span class="card-label">The best seller</span><span class="card-number">01 / 03</span>
+          <h3>Berry cloud</h3><p>Strawberry glaze, vanilla bean, and a little rainbow of sprinkles.</p>
+          <div class="card-price">$4.50 <small>/ each</small></div>
+          <svg class="mini-donut" viewBox="0 0 220 170" aria-hidden="true">
+            <defs><radialGradient id="miniDough" cx="35%" cy="25%"><stop stop-color="#ffe2a2"/><stop offset="1" stop-color="#bd6a3e"/></radialGradient></defs>
+            <ellipse cx="111" cy="142" rx="75" ry="14" fill="#9e684c" opacity=".18"/>
+            <path d="M110 22a76 58 0 1 0 0 116a76 58 0 0 0 0-116Zm0 36a27 21 0 1 1 0 42a27 21 0 0 1 0-42Z" fill="url(#miniDough)" fill-rule="evenodd"/>
+            <path d="M110 27c41 0 68 23 68 51 0 18-13 31-23 40-7 6-16 3-16-5 0-9-8-10-12-2-5 10-17 8-17-1 0-8-7-10-12-3-7 9-17 4-14-4 3-7-4-10-10-4-8 7-16 1-12-6 4-7 1-11-7-8-10 4-15-3-8-10 7-7 4-12-4-12-9 0-11-7-3-12 8-4 8-9 0-13-10-5-7-14 4-15 11 0 12-6 6-12-7-8-1-15 9-10 9 5 14 2 14-7 0-10 10-13 15-3 4 9 10 9 15 1 6-9 15-5 13 5-2 9 4 12 12 6 9-7 16 0 10 9-5 8-2 13 7 11 11-2 14 8 4 13-9 5-8 10 1 13 11 3 10 13-1 15-9 2-12 7-6 14Z" fill="#f27891" fill-rule="evenodd"/>
+            <path d="m75 58 8 5m26-21-2 8m35 3-7 6m15 35-8-2m-31 31-2-8m-39-5 7-4m-18-29 8 2" stroke="#fff1d2" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </article>
+        <article class="menu-card reveal">
+          <span class="card-label">A little bit fancy</span><span class="card-number">02 / 03</span>
+          <h3>Midnight dip</h3><p>Dark chocolate, a pinch of flaky salt, and absolutely no regrets.</p>
+          <div class="card-price">$5.00 <small>/ each</small></div>
+          <svg class="mini-donut" viewBox="0 0 220 170" aria-hidden="true">
+            <ellipse cx="111" cy="142" rx="75" ry="14" fill="#694335" opacity=".17"/>
+            <path d="M110 22a76 58 0 1 0 0 116a76 58 0 0 0 0-116Zm0 36a27 21 0 1 1 0 42a27 21 0 0 1 0-42Z" fill="#cb8149" fill-rule="evenodd"/>
+            <path d="M110 27c41 0 68 23 68 51 0 18-13 31-23 40-7 6-16 3-16-5 0-9-8-10-12-2-5 10-17 8-17-1 0-8-7-10-12-3-7 9-17 4-14-4 3-7-4-10-10-4-8 7-16 1-12-6 4-7 1-11-7-8-10 4-15-3-8-10 7-7 4-12-4-12-9 0-11-7-3-12 8-4 8-9 0-13-10-5-7-14 4-15 11 0 12-6 6-12-7-8-1-15 9-10 9 5 14 2 14-7 0-10 10-13 15-3 4 9 10 9 15 1 6-9 15-5 13 5-2 9 4 12 12 6 9-7 16 0 10 9-5 8-2 13 7 11 11-2 14 8 4 13-9 5-8 10 1 13 11 3 10 13-1 15-9 2-12 7-6 14Z" fill="#75463c" fill-rule="evenodd"/>
+            <path d="m75 58 8 5m26-21-2 8m35 3-7 6m15 35-8-2m-31 31-2-8m-39-5 7-4m-18-29 8 2" stroke="#ffe2a2" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </article>
+        <article class="menu-card reveal">
+          <span class="card-label">The soft one</span><span class="card-number">03 / 03</span>
+          <h3>Pistachio daydream</h3><p>Toasty pistachio glaze, lemon zest, and a buttery brioche hug.</p>
+          <div class="card-price">$5.25 <small>/ each</small></div>
+          <svg class="mini-donut" viewBox="0 0 220 170" aria-hidden="true">
+            <ellipse cx="111" cy="142" rx="75" ry="14" fill="#60754f" opacity=".17"/>
+            <path d="M110 22a76 58 0 1 0 0 116a76 58 0 0 0 0-116Zm0 36a27 21 0 1 1 0 42a27 21 0 0 1 0-42Z" fill="#d39154" fill-rule="evenodd"/>
+            <path d="M110 27c41 0 68 23 68 51 0 18-13 31-23 40-7 6-16 3-16-5 0-9-8-10-12-2-5 10-17 8-17-1 0-8-7-10-12-3-7 9-17 4-14-4 3-7-4-10-10-4-8 7-16 1-12-6 4-7 1-11-7-8-10 4-15-3-8-10 7-7 4-12-4-12-9 0-11-7-3-12 8-4 8-9 0-13-10-5-7-14 4-15 11 0 12-6 6-12-7-8-1-15 9-10 9 5 14 2 14-7 0-10 10-13 15-3 4 9 10 9 15 1 6-9 15-5 13 5-2 9 4 12 12 6 9-7 16 0 10 9-5 8-2 13 7 11 11-2 14 8 4 13-9 5-8 10 1 13 11 3 10 13-1 15-9 2-12 7-6 14Z" fill="#8ebc8c" fill-rule="evenodd"/>
+            <path d="m75 58 8 5m26-21-2 8m35 3-7 6m15 35-8-2m-31 31-2-8m-39-5 7-4m-18-29 8 2" stroke="#fff1d2" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </article>
+      </div>
+    </section>
+
+    <section class="story" id="our-way" aria-labelledby="story-title">
+      <div class="story-inner">
+        <div class="story-copy reveal">
+          <div class="eyebrow">A slower kind of sweet</div>
+          <h2 id="story-title">Good things take a little <em>time.</em></h2>
+          <p>We start before the sun comes up, fold real butter into every batch, and glaze each donut by hand. Not because we have to. Because you can taste the difference.</p>
+          <a class="button" href="#love-notes">A peek behind the counter <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <div class="process reveal">
+          <div class="process-step"><b>01</b><div><h3>Up before the sun</h3><p>Our dough gets a slow, cozy overnight rise. More time means more flavor.</p></div></div>
+          <div class="process-step"><b>02</b><div><h3>Made by our hands</h3><p>Rolled, cut, and fried in small batches. Every single morning.</p></div></div>
+          <div class="process-step"><b>03</b><div><h3>A little extra love</h3><p>Hand-dipped, dressed up, and ready to make somebody's day.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote-section reveal" id="love-notes" aria-label="Customer review">
+      <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote>“The kind of donut that makes you stop mid-sentence and just close your eyes for a second.”</blockquote>
+      <div class="quote-by">Mia R. <span>·</span> local donut enthusiast</div>
+    </section>
+
+    <section class="closing">
+      <div class="eyebrow">Your morning called</div>
+      <h2>It wants a donut<br>with extra sprinkles.</h2>
+      <button class="button" data-order>Find your happy place <span class="arrow" aria-hidden="true">→</span></button>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="#"><span class="brand-mark">d</span><span>daybreak donuts</span></a>
+    <span>Made fresh, with a little love. © 2025 Daybreak Donuts.</span>
+    <div class="footer-links"><a href="#menu">The menu</a><a href="#our-way">Our story</a><a href="mailto:hello@daybreakdonuts.example">Say hello</a></div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const flavorColors = {
+      berry: { glaze: "#f27891", edge: "#d95473", title: "Berry cloud donut" },
+      chocolate: { glaze: "#75463c", edge: "#57332e", title: "Midnight chocolate donut" },
+      pistachio: { glaze: "#8ebc8c", edge: "#6d9d70", title: "Pistachio daydream donut" }
+    };
+    const heroArt = document.querySelector(".hero-art");
+    const donut = document.querySelector(".donut-wrap");
+    const glaze = document.querySelector(".glaze");
+    const donutTitle = document.querySelector("#donutTitle");
+    document.querySelectorAll(".flavor").forEach((button) => {
+      button.addEventListener("click", () => {
+        const flavor = flavorColors[button.dataset.flavor];
+        heroArt.style.setProperty("--glaze", flavor.glaze);
+        heroArt.style.setProperty("--glaze-edge", flavor.edge);
+        glaze.setAttribute("fill", flavor.glaze);
+        glaze.setAttribute("stroke", flavor.edge);
+        donutTitle.textContent = flavor.title;
+        document.querySelectorAll(".flavor").forEach((choice) => {
+          choice.setAttribute("aria-pressed", String(choice === button));
+        });
+      });
+    });
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector("#navLinks");
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+      menuToggle.textContent = isOpen ? "×" : "☰";
+    });
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open menu");
+        menuToggle.textContent = "☰";
+      });
+    });
+
+    const toast = document.querySelector("#toast");
+    let toastTimer;
+    document.querySelectorAll("[data-order]").forEach((button) => {
+      button.addEventListener("click", () => {
+        toast.textContent = "Your happy place is coming soon, see you at the counter!";
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
+      });
+    });
+
+    if (window.matchMedia("(pointer: fine)").matches) {
+      heroArt.addEventListener("pointermove", (event) => {
+        const bounds = heroArt.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width - .5;
+        const y = (event.clientY - bounds.top) / bounds.height - .5;
+        donut.style.setProperty("--tilt-y", `${x * 9}deg`);
+        donut.style.setProperty("--tilt-x", `${-y * 7}deg`);
+      });
+      heroArt.addEventListener("pointerleave", () => {
+        donut.style.setProperty("--tilt-y", "0deg");
+        donut.style.setProperty("--tilt-x", "0deg");
+      });
+    }
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            currentObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12 });
+      document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    } else {
+      document.querySelectorAll(".reveal").forEach((element) => element.classList.add("visible"));
+    }
+  </script>
+</body>
+</html>
